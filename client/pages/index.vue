@@ -148,7 +148,7 @@ export default {
             return false;
           }
           this.$axios
-            .post("api/addrequest", { transport: this.form.transport, phone: this.form.phone, image: this.form.image })
+            .post("addrequest", { transport: this.form.transport, phone: this.form.phone, image: this.form.image })
             .then((response) => {
               if (response.status === 201) {
                 this.show = false;
