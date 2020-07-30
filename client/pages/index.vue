@@ -9,7 +9,7 @@
       v-for="item in option"
       :key="item.value"
       :label="item.label"
-      :value="item.value">
+      :value="item.label">
     </el-option>
     </el-select>
     </el-form-item>
@@ -148,7 +148,7 @@ export default {
             return false;
           }
           this.$axios
-            .post("addrequest", { transport: this.form.transport, phone: this.form.phone, image: this.form.image })
+            .post("addrequest", {  fio: this.form.fio,  transport: this.form.transport, phone: this.form.phone, image: this.form.image })
             .then((response) => {
               if (response.status === 201) {
                 this.show = false;
