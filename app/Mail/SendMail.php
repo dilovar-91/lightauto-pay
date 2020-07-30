@@ -16,12 +16,12 @@ class SendMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($fio, $phone, $transport, $images)
     {
-        $this->fio = "ffffffffffff";
-        $this->phone = 'fffffffff';
-        $this->transport = 'авиа';
-        //$this->images = $images;
+        $this->fio = $fio;
+        $this->phone = $phone;
+        $this->transport = $transport;
+        $this->images = $images;
        
     }
 
