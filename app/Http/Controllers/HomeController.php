@@ -25,7 +25,7 @@ class HomeController extends Controller
         $phone = $request->phone;
         $transport = $request->transport;
         $images = $request->image;
-        Mail::to('Cloudways@Cloudways.com')->send(new SendMail($fio, $phone, $transport, $images ));
-        return  response()->json(['imageName'=>$imageName]);
+        Mail::to('dilovar09@gmail.com')->send(new SendMail($fio, $phone, $transport, $images ));
+        return  response()->json($images, 201);
     }
 }
