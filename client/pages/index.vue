@@ -4,7 +4,7 @@
     <div class="row">
     <div class="col-md-3 pr-2 pl-2  mb-2">    
     <el-form-item prop="transport" required>
-    <el-select v-model="form.transport" size="large" class="w-100" clearable placeholder="Вид транспорта">
+    <el-select v-model="form.transport" size="medium" class="w-100" clearable placeholder="Вид транспорта">
     <el-option
       v-for="item in option"
       :key="item.value"
@@ -17,6 +17,7 @@
     <div class="col-md-5 pr-2 pl-2  mb-2">
     <el-form-item prop="fio" required>
     <el-input
+    size="medium"
     placeholder="ФИО"
     v-model="form.fio">
     </el-input>
@@ -25,6 +26,7 @@
     <div class="col-md-4 pr-2 pl-2  mb-2">
     <el-form-item prop="phone" required>
     <el-input
+    size="medium"
     masked="true"
     v-model="form.phone"
     v-mask="'+7 (###) ###-## ##'"
@@ -70,8 +72,9 @@ export default {
         phone: '',
         image: ''
       },
+      imageMessage: false,
       options: {
-        url: 'http://transit/api/uploadimage',
+        url: 'addrequest',
         autoProcessQueue: false,
         uploadMultiple: true,
         acceptedFiles: "image/*",
@@ -79,6 +82,7 @@ export default {
         maxFiles: 4,
         dictDefaultMessage: "<i class='fa fa-camera fa-5x'></i>",
         addRemoveLinks: true,
+        parallelUploads: 10,
         //headers: { "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content }
       },
        option: [{
@@ -86,13 +90,13 @@ export default {
           label: 'ЖД'
         }, {
           value: '2',
-          label: 'Авиа'
+          label: 'АВИА'
         }, {
           value: '3',
-          label: 'Автобус'
+          label: 'АВТОБУС'
         }, {
           value: '4',
-          label: 'Автомобиль'
+          label: 'АВТОМОБИЛЬ'
         }],
       rules: {
         fio: [
@@ -136,6 +140,7 @@ export default {
         },
       removedImage(file, response) {
             this.form.image = ''
+            this.imageMessage = true
         },
       addRequest() {
       this.$refs["form"].validate((valid) => {
@@ -150,7 +155,7 @@ export default {
                 this.$notify({
                   title: "Спасибо, заявка принята",
                   message: "Ожидайте в течении 10 минут оператор свяжется с Вами",
-                  position: "top-right",
+                  position: "bottom-right",
                   type: "success",
                   showClose: false,
                 });
@@ -160,7 +165,7 @@ export default {
               this.$notify({
                 title: "Извините" + this.form.phone,
                 message: "Произошла ошибка!!!",
-                position: "top-right",
+                position: "bottom-right",
                 type: "error",
                 showClose: false,
               });
