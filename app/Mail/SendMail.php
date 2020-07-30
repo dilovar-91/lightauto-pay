@@ -38,6 +38,7 @@ class SendMail extends Mailable
             ->with([
                 'fio' => $this->fio,                
                 'phone' => $this->phone,
+                'transport' => $this->transport,
             ]);
     }
 }
