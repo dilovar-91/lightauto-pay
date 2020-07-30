@@ -9,7 +9,7 @@ module.exports = {
 
   server: {
     port: 8000, // default: 3000
-    host: '0.0.0.0' // default: localhost
+    //host: '0.0.0.0' // default: localhost
   },
   env: {
     apiUrl: process.env.API_URL || process.env.APP_URL + '/api',
