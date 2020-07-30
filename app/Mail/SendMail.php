@@ -32,12 +32,11 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->from('dilovar09@gmail.com', 'Пилот авто')
+        return $this->from('hello@paytravel.ru', 'Пилот авто')
             ->subject('Оплата проезда')
             ->markdown('mails.exmpl')
             ->with([
-                'fio' => $this->fio,
-                'link' => 'https://mailtrap.io/inboxes',
+                'fio' => $this->fio,                
                 'phone' => $this->phone,
             ]);
     }

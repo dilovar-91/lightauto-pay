@@ -1,11 +1,11 @@
 @component('mail::message')
-Hello **{{$fio}}**,  {{-- use double space for line break --}}
-Thank you for choosing Mailtrap!
+Клиент по имени **{{$fio}}** отправил заявку на оплата проезда
+Вид транспорта: {{$transport}}
 
 Click below to start working right now
-@component('mail::button', ['url' => $link])
+@component('mail::button', ['url' => 'tel:'.$phone])
 {{$phone}}
 @endcomponent
-Sincerely,  
-Mailtrap team.
+Отправлено из https://paytravel77.ru/,  
+Пилот авто {{date('Y')}}.
 @endcomponent
