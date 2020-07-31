@@ -61,7 +61,11 @@ module.exports = {
 
   axios: {
     // extra config e.g
-    BaseURL: process.env.API_URL
+    BaseURL: process.env.API_URL,
+    requestInterceptor: (config, {store}) => {
+      config.headers.common['Authorization'] = 'Bearer ' + store.state.token
+      return config
+    }
   },
 
   build: {

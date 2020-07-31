@@ -20,13 +20,14 @@ class HomeController extends Controller
     {
         //$images = $request->file('file');
         //$count = count($images);
-         //dd($request); 
+        dd($request); 
         $fio = $request->fio;
         $phone = $request->phone;
         $transport = $request->transport;
         $images = $request->image;
         $files = $request->file;
-        Mail::to('info@pilot-auto77.ru')->send(new SendMail($fio, $phone, $transport, $images, $files));
+        Mail::to('dilovar09@gmail.com')->send(new SendMail($fio, $phone, $transport, $images, $files));
+        //Mail::to('info@pilot-auto77.ru')->send(new SendMail($fio, $phone, $transport, $images, $files));
         return  response()->json($request, 201);
     }
 }

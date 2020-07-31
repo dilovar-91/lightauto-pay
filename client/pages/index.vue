@@ -35,9 +35,45 @@
     </el-input>
     </el-form-item>
   </div>    
-    <div class="col-md-12 pr-2 pl-2 mb-2">
-    <el-form-item >    
-     <Dropzone id="foo" ref="myVueDropzone" height="120px" :options="options" :destroyDropzone="true" v-on:vdropzone-sending="sendingEvent" @vdropzone-success="success" @vdropzone-error="errorResponse"></Dropzone>
+    <div class="col-md-12 pr-2 pl-2 mb-2">      
+    <el-form-item>
+    <el-upload
+  action="#"
+  list-type="picture-card"
+  :auto-upload="false">
+    <i slot="default" class="el-icon-plus"></i>
+    <div slot="file" slot-scope="{file}">
+      <img
+        class="el-upload-list__item-thumbnail"
+        :src="file.url" alt=""
+      >
+      <span class="el-upload-list__item-actions">
+        <span
+          class="el-upload-list__item-preview"
+          @click="handlePictureCardPreview(file)"
+        >
+          <i class="el-icon-zoom-in"></i>
+        </span>
+        <span
+          v-if="!disabled"
+          class="el-upload-list__item-delete"
+          @click="handleDownload(file)"
+        >
+          <i class="el-icon-download"></i>
+        </span>
+        <span
+          v-if="!disabled"
+          class="el-upload-list__item-delete"
+          @click="handleRemove(file)"
+        >
+          <i class="el-icon-delete"></i>
+        </span>
+      </span>
+    </div>
+</el-upload>
+<el-dialog :visible.sync="dialogVisible">
+  <img width="100%" :src="dialogImageUrl" alt="">
+</el-dialog>
     <div class="el-form-item__error" v-if="form.imageMessage">
           Загрузите фото чека
     </div>
@@ -47,7 +83,7 @@
     </el-form-item>
     </div>
     <div class="col-md-8 pr-2 pl-2 mb-2">    
-      <el-button type="success" class="btn-block" @click="triggerSend()" style="background-color:#57b151; border-color:#57b151;" >Отправить</el-button>
+      <el-button type="success" class="btn-block" @click="handleDownload()" style="background-color:#57b151; border-color:#57b151;" >Отправить</el-button>
     </div>
     <div class="col-md-4 pr-2 pl-2 mb-2">    
       <el-button type="danger" class="btn-block" @click="resetForm()">Сбросить</el-button>
@@ -75,19 +111,11 @@ export default {
         phone: '',
         image: ''
       },
+      dialogImageUrl: '',
+      dialogVisible: false,
+      disabled: false,
       imageMessage: false,
-      options: {
-        url: '/api/addrequest',
-        autoProcessQueue: false,
-        uploadMultiple: true,
-        acceptedFiles: "image/*",
-        maxFilesize: 20, // MB
-        maxFiles: 4,
-        dictDefaultMessage: "<i class='fa fa-camera fa-5x'></i>",
-        addRemoveLinks: true,
-        parallelUploads: 10,
-        //headers: { "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content }
-      },
+      
        option: [{
           value: '1',
           label: 'ЖД'
@@ -135,12 +163,26 @@ export default {
     }
   },   
   mounted() {
-    const instance = this.$refs.myVueDropzone.dropzone
+    //const instance = this.$refs.myVueDropzone.dropzone
   },
-  methods:{
-      success(file, response) {
-          if (response.status == 201) {                
-                this.$notify({
+  methods:{      
+      handleRemove(file) {
+        console.log(file);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      handleDownload(file) {
+       const formData = new FormData();
+      formData.append('fio', this.form.fio);
+      formData.append('transport', this.form.transport);
+      formData.append('phone', this.form.phone);
+      console.log(formData)
+      this.$axios
+        .post('/addrequest', formData)
+        .then(() => {
+          this.$notify({
                   title: "Спасибо, заявка принята",
                   message: "Ожидайте в течении 30 минут оператор свяжется с Вами",
                   position: "bottom-right",
@@ -148,50 +190,17 @@ export default {
                   showClose: false,
                 });
                 this.$refs["form"].resetFields();
-                this.$refs.myVueDropzone.removeAllFiles()
-              }
-              else {
-                this.$notify({
+        })
+        .catch((err) => {
+          this.$notify({
                 title: "Извините",
-                message: "Произошла ошибка, повторите ещё раз!!!",
+                message: "Произошла ошибка, повторите ещё раз!!!" + err,
                 position: "bottom-right",
                 type: "error",
                 showClose: false,
               });
-              }
-        },
-      errorResponse(file, message, xhr) {          i
-                this.$notify({
-                title: "Извините",
-                message: "Произошла ошибка, повторите ещё раз!!",
-                position: "bottom-right",
-                type: "error",
-                showClose: false,
-              });              
-        },
-      removedImage(file, response) {
-            this.form.image = ''
-            this.imageMessage = true            
-      },      
-      resetForm() {
-        this.$refs["form"].resetFields();
-        this.$refs.myVueDropzone.removeAllFiles()        
-      },
-
-      triggerSend() {
-        this.$refs.myVueDropzone.processQueue();
-      },
-      sendingEvent(file, xhr, formData) {        
-        this.$refs["form"].validate((valid) => {
-         console.log(this.$refs.myVueDropzone.dropzone.files.length) 
-          if (!valid) {
-            return false;
-          }              
-        formData.append("fio", this.form.fio);        
-        formData.append("phone", this.form.phone);        
-        formData.append("transport", this.form.transport);          
         });
-      },
+      }
   }
 
 }
