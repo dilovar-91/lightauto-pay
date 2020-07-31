@@ -38,9 +38,10 @@
     <div class="col-md-12 pr-2 pl-2 mb-2">      
     <el-form-item>
     <el-upload
-  action="/aapi/addrequest"
+  action="#"
   :file-list="fileList"
   list-type="picture-card"
+  :headers="headerInfo"
   ref="upload"  
   :data="form"
   :before-upload="handleBeforeUpload"
@@ -87,7 +88,7 @@
     </el-form-item>
     </div>
     <div class="col-md-8 pr-2 pl-2 mb-2">    
-      <el-button type="success" class="btn-block" native-type="submit"  style="background-color:#57b151; border-color:#57b151;" >Отправить</el-button>
+      <el-button type="success" class="btn-block" @click="handleDownload"  style="background-color:#57b151; border-color:#57b151;" >Отправить</el-button>
     </div>
     <div class="col-md-4 pr-2 pl-2 mb-2">    
       <el-button type="danger" class="btn-block" @click="resetForm()">Сбросить</el-button>
@@ -115,6 +116,11 @@ export default {
         fio: '',
         phone: '',
         image: ''
+      },
+      headerInfo: {
+        'Access-Control-Allow-Origin': this.$axios.post('addrequest'),
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, X-File-Name, X-File-Size, X-File-Type'
       },
       dialogImageUrl: '',
       dialogVisible: false,
