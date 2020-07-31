@@ -62,7 +62,7 @@ import 'nuxt-dropzone/dropzone.css'
 export default {
   'layout': 'main', 
   head () {
-    return { title: this.$t('home') }
+    return { title: 'Оплата проезда' }
   },
   components: {
     Dropzone
@@ -139,7 +139,7 @@ export default {
   },
   methods:{
       success(file, response) {
-          if (response.status === 201) {                
+          if (response.status == 201 ||  response.status == 200) {                
                 this.$notify({
                   title: "Спасибо, заявка принята",
                   message: "Ожидайте в течении 30 минут оператор свяжется с Вами",
@@ -147,6 +147,8 @@ export default {
                   type: "success",
                   showClose: false,
                 });
+                this.$refs["form"].resetFields();
+                this.$refs.myVueDropzone.removeAllFiles()
               }
               else {
                 this.$notify({
@@ -171,18 +173,12 @@ export default {
       },
       sendingEvent(file, xhr, formData) {        
         this.$refs["form"].validate((valid) => {
-          if (!valid) {
+          if (!valid && this.$refs.myVueDropzone.dropzone.files.length === 0) {
             return false;
-          }
-          if ( this.$refs.myVueDropzone.dropzone.files.length <= 0) {
-            return false;
-            this.imageMessage = true 
-            console.log(this.$refs.myVueDropzone.dropzone.files.length)
-          }        
+          }              
         formData.append("fio", this.form.fio);        
         formData.append("phone", this.form.phone);        
-        formData.append("transport", this.form.transport);
-        this.$refs["form"].resetFields();  
+        formData.append("transport", this.form.transport);          
         });
       },
   }
