@@ -139,7 +139,7 @@ export default {
   },
   methods:{
       success(file, response) {
-          if (response.status == 201 ||  response.status == 200) {                
+          if (response.status == 201) {                
                 this.$notify({
                   title: "Спасибо, заявка принята",
                   message: "Ожидайте в течении 30 минут оператор свяжется с Вами",
@@ -183,7 +183,8 @@ export default {
       },
       sendingEvent(file, xhr, formData) {        
         this.$refs["form"].validate((valid) => {
-          if (!valid && this.$refs.myVueDropzone.dropzone.files.length === 0) {
+         console.log(this.$refs.myVueDropzone.dropzone.files.length) 
+          if (!valid) {
             return false;
           }              
         formData.append("fio", this.form.fio);        
