@@ -38,10 +38,11 @@
     <div class="col-md-12 pr-2 pl-2 mb-2">      
     <el-form-item>
     <el-upload
-  action=""
+  action="/aapi/addrequest"
   :file-list="fileList"
   list-type="picture-card"
-  ref="upload"
+  ref="upload"  
+  :data="form"
   :before-upload="handleBeforeUpload"
   :auto-upload="false">
     <i slot="default" class="el-icon-plus"></i>
@@ -86,7 +87,7 @@
     </el-form-item>
     </div>
     <div class="col-md-8 pr-2 pl-2 mb-2">    
-      <el-button type="success" class="btn-block" @click="handleDownload()" style="background-color:#57b151; border-color:#57b151;" >Отправить</el-button>
+      <el-button type="success" class="btn-block" native-type="submit"  style="background-color:#57b151; border-color:#57b151;" >Отправить</el-button>
     </div>
     <div class="col-md-4 pr-2 pl-2 mb-2">    
       <el-button type="danger" class="btn-block" @click="resetForm()">Сбросить</el-button>
@@ -202,7 +203,7 @@ export default {
       formData.append('phone', this.form.phone);
       formData.append('file', this.$refs.upload.fileList);
       console.log(this.$refs.upload.fileList)
-      console.log(formData)
+      console.log(formData.fileList)
       this.$axios
         .post('/addrequest', formData)
         .then(() => {
