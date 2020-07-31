@@ -21,7 +21,7 @@ class SendMail extends Mailable
         $this->fio = $fio;
         $this->phone = $phone;
         $this->transport = $transport;
-        $this->images = $images;
+        $this->files = $files;
        
     }
 
@@ -32,7 +32,7 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->from('hello@paytravel.ru', 'Пилот авто')
+        $message =  $this->from('hello@paytravel.ru', 'Пилот авто')
             ->subject('Оплата проезда')
             ->markdown('mails.exmpl')
             ->with([
@@ -40,5 +40,21 @@ class SendMail extends Mailable
                 'phone' => $this->phone,
                 'transport' => $this->transport,
             ]);
+
+            
+
+            if(count($files > 0)) {
+                foreach($files as $file) {
+                    $message->attach($file->getRealPath(), array(
+                        'as' => $file->getClientOriginalName(), // If you want you can chnage original name to custom name      
+                        'mime' => $file->getMimeType())
+                    );
+                }
+            }
+
+            return $message;
+
+
+
     }
 }
