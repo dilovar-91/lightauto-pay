@@ -40,18 +40,14 @@ class SendMail extends Mailable
                 'phone' => $this->phone,
                 'transport' => $this->transport,
             ]);
-
-            
-
-           
-                foreach($this->$files as $file) {
+            if (isset($this->$files)){
+            foreach($this->$files as $file) {
                     $message->attach($file->getRealPath(), array(
                         'as' => $file->getClientOriginalName(), // If you want you can chnage original name to custom name      
                         'mime' => $file->getMimeType())
                     );
                 }
-            
-
+            }
             return $message;
 
 
