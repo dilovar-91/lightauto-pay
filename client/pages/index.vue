@@ -77,7 +77,7 @@ export default {
       },
       imageMessage: false,
       options: {
-        url: '/api/addrequest',
+        url: 'https://api.paytravel77.ru/api/addrequest',
         autoProcessQueue: false,
         uploadMultiple: true,
         acceptedFiles: "image/*",
