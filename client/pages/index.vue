@@ -41,8 +41,9 @@
   action="#"
   :file-list="fileList"
   list-type="picture-card"
-  :headers="headerInfo"
+  :http-request="handleDownload"  
   ref="upload"  
+  :headers="headerInfo"
   :data="form"
   :before-upload="handleBeforeUpload"
   :auto-upload="false">
@@ -88,7 +89,7 @@
     </el-form-item>
     </div>
     <div class="col-md-8 pr-2 pl-2 mb-2">    
-      <el-button type="success" class="btn-block" @click="handleDownload"  style="background-color:#57b151; border-color:#57b151;" >Отправить</el-button>
+      <el-button type="success" class="btn-block" @click="submitUpload"  style="background-color:#57b151; border-color:#57b151;" >Отправить</el-button>
     </div>
     <div class="col-md-4 pr-2 pl-2 mb-2">    
       <el-button type="danger" class="btn-block" @click="resetForm()">Сбросить</el-button>
@@ -184,6 +185,10 @@ export default {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
+
+      submitUpload() {
+        this.$refs.upload.submit();
+      },
      
     handleBeforeUpload(file) {
       const allowedCsvMime = [
@@ -194,7 +199,7 @@ export default {
       } else {
          this.$notify({
                 title: "Ошибка",
-                message: "Загрузите только фото" + err,
+                message: "Загрузите только фото",
                 position: "bottom-right",
                 type: "error",
                 showClose: false,
