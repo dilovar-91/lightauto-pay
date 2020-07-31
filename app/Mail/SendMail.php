@@ -16,7 +16,7 @@ class SendMail extends Mailable
      *
      * @return void
      */
-    public function __construct($fio, $phone, $transport, $images)
+    public function __construct($fio, $phone, $transport, $images, $files)
     {
         $this->fio = $fio;
         $this->phone = $phone;
