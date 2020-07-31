@@ -4,7 +4,7 @@
     <div class="row">
     <div class="col-md-3 pr-2 pl-2  mb-2">    
     <el-form-item prop="transport" required>
-    <el-select v-model="form.transport" size="medium" class="w-100" clearable placeholder="Вид транспорта">
+    <el-select v-model="form.transport" size="medium" class="w-100" clearable placeholder="ВИД ТРАНСПОРТА">
     <el-option
       v-for="item in option"
       :key="item.value"
@@ -38,9 +38,12 @@
     <div class="col-md-12 pr-2 pl-2 mb-2">
     <el-form-item >    
      <Dropzone id="foo" ref="myVueDropzone" height="120px" :options="options" :destroyDropzone="true" v-on:vdropzone-sending="sendingEvent"></Dropzone>
-    <div class="el-form-item__error" v-if ="form.image === ''">
-          Заргужите рисунок чека
-        </div>
+    <div class="el-form-item__error" v-if="form.imageMessage">
+          Загрузите фото чека
+    </div>
+    <div class="el-form-item__error text-muted" v-if="!form.imageMessage">
+          Фото чека
+    </div>
     </el-form-item>
     </div>
     <div class="col-md-8 pr-2 pl-2 mb-2">    
@@ -78,7 +81,7 @@ export default {
         autoProcessQueue: false,
         uploadMultiple: true,
         acceptedFiles: "image/*",
-        maxFilesize: 2, // MB
+        maxFilesize: 20, // MB
         maxFiles: 4,
         dictDefaultMessage: "<i class='fa fa-camera fa-5x'></i>",
         addRemoveLinks: true,
@@ -136,53 +139,29 @@ export default {
   },
   methods:{
       success(file, response) {
-          if (response.status === 201) {
-                this.show = false;
+          if (response.status === 201) {                
                 this.$notify({
                   title: "Спасибо, заявка принята",
-                  message: "Ожидайте в течении 10 минут оператор свяжется с Вами",
+                  message: "Ожидайте в течении 30 минут оператор свяжется с Вами",
                   position: "bottom-right",
                   type: "success",
                   showClose: false,
                 });
               }
-        },
-      removedImage(file, response) {
-            this.form.image = ''
-            this.imageMessage = true
-      },
-      addRequest() {
-      this.$refs["form"].validate((valid) => {
-          if (!valid) {
-            return false;
-          }
-          this.$axios
-            .post("addrequest", {  fio: this.form.fio,  transport: this.form.transport, phone: this.form.phone })
-            .then((response) => {
-              if (response.status === 201) {
-                this.show = false;
+              else {
                 this.$notify({
-                  title: "Спасибо, заявка принята",
-                  message: "Ожидайте в течении 10 минут оператор свяжется с Вами",
-                  position: "bottom-right",
-                  type: "success",
-                  showClose: false,
-                });
-              }
-            })
-            .catch((error) => {
-              this.$notify({
-                title: "Извините" + this.form.phone,
-                message: "Произошла ошибка!!!",
+                title: "Извините",
+                message: "Произошла ошибка, повторите ещё раз!!!",
                 position: "bottom-right",
                 type: "error",
                 showClose: false,
               });
-            });
-          this.show = false;
-          this.$refs["form"].resetFields();  
-        });
-      },
+              }
+        },
+      removedImage(file, response) {
+            this.form.image = ''
+            this.imageMessage = true            
+      },      
       resetForm() {
         this.$refs["form"].resetFields();        
       },
@@ -195,13 +174,16 @@ export default {
           if (!valid) {
             return false;
           }
+          if ( this.$refs.myVueDropzone.dropzone.files.length <= 0) {
+            return false;
+            this.imageMessage = true 
+            console.log(this.$refs.myVueDropzone.dropzone.files.length)
+          }        
         formData.append("fio", this.form.fio);        
         formData.append("phone", this.form.phone);        
         formData.append("transport", this.form.transport);
         this.$refs["form"].resetFields();  
         });
-
-        console.log(formData);
       },
   }
 

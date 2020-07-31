@@ -42,9 +42,9 @@ class SendMail extends Mailable
             ]);
             if (count($this->files)>0){
             foreach($this->files as $file) {
-                    //$message->attach($file, $file->getClientOriginalName());
+                    
                     $message->attach($file->getRealPath(), array(
-                        'as' => $file->getClientOriginalName(), // If you want you can chnage original name to custom name      
+                        'as' => $file->getClientOriginalName(),     
                         'mime' => $file->getMimeType())
                     );
                 }
