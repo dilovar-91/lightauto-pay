@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-    <el-form :model="form" :rules="rules" class="mt-0" ref="form">
+    <el-form :model="form" :rules="rules" class="mt-0" ref="form" enctype="multipart/form-data">
     <div class="row">
     <div class="col-md-3 pr-2 pl-2  mb-2">    
     <el-form-item prop="transport" required>
@@ -190,8 +190,7 @@ export default {
       triggerSend() {
         this.$refs.myVueDropzone.processQueue();
       },
-      sendingEvent(file, xhr, formData) {
-        
+      sendingEvent(file, xhr, formData) {        
         this.$refs["form"].validate((valid) => {
           if (!valid) {
             return false;
