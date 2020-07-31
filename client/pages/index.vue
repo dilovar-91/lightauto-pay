@@ -37,7 +37,7 @@
   </div>    
     <div class="col-md-12 pr-2 pl-2 mb-2">
     <el-form-item >    
-     <Dropzone id="foo" ref="myVueDropzone" height="120px" :options="options" :destroyDropzone="true" v-on:vdropzone-sending="sendingEvent"></Dropzone>
+     <Dropzone id="foo" ref="myVueDropzone" height="120px" :options="options" :destroyDropzone="true" v-on:vdropzone-sending="sendingEvent" @vdropzone-success="success" @vdropzone-error="errorResponse"></Dropzone>
     <div class="el-form-item__error" v-if="form.imageMessage">
           Загрузите фото чека
     </div>
@@ -160,12 +160,22 @@ export default {
               });
               }
         },
+      errorResponse(file, message, xhr) {          i
+                this.$notify({
+                title: "Извините",
+                message: "Произошла ошибка, повторите ещё раз!!",
+                position: "bottom-right",
+                type: "error",
+                showClose: false,
+              });              
+        },
       removedImage(file, response) {
             this.form.image = ''
             this.imageMessage = true            
       },      
       resetForm() {
-        this.$refs["form"].resetFields();        
+        this.$refs["form"].resetFields();
+        this.$refs.myVueDropzone.removeAllFiles()        
       },
 
       triggerSend() {
