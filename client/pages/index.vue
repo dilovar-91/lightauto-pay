@@ -38,8 +38,11 @@
     <div class="col-md-12 pr-2 pl-2 mb-2">      
     <el-form-item>
     <el-upload
-  action="#"
+  action=""
+  :file-list="fileList"
   list-type="picture-card"
+  ref="upload"
+  :before-upload="handleBeforeUpload"
   :auto-upload="false">
     <i slot="default" class="el-icon-plus"></i>
     <div slot="file" slot-scope="{file}">
@@ -105,6 +108,7 @@ export default {
   },
   data() {
     return {
+      fileList: [],
       form: {
         transport: '',
         fio: '',
@@ -173,11 +177,31 @@ export default {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-      handleDownload(file) {
+     
+    handleBeforeUpload(file) {
+      const allowedCsvMime = [
+        'image/*',        
+      ];
+      if (allowedCsvMime.includes(file.type)) {
+        return true;
+      } else {
+         this.$notify({
+                title: "Ошибка",
+                message: "Загрузите только фото" + err,
+                position: "bottom-right",
+                type: "error",
+                showClose: false,
+              });        
+        this.fileList.pop(file);
+      }
+    },
+      handleDownload() {
        const formData = new FormData();
       formData.append('fio', this.form.fio);
       formData.append('transport', this.form.transport);
       formData.append('phone', this.form.phone);
+      formData.append('file', this.$refs.upload.fileList);
+      console.log(this.$refs.upload.fileList)
       console.log(formData)
       this.$axios
         .post('/addrequest', formData)
