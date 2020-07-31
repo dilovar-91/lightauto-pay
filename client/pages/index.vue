@@ -37,14 +37,14 @@
   </div>    
     <div class="col-md-12 pr-2 pl-2 mb-2">
     <el-form-item >    
-     <Dropzone id="foo" ref="el" height="120px" :options="options" :destroyDropzone="true"></Dropzone>
+     <Dropzone id="foo" ref="myVueDropzone" height="120px" :options="options" :destroyDropzone="true" v-on:vdropzone-sending="sendingEvent"></Dropzone>
     <div class="el-form-item__error" v-if ="form.image === ''">
           Заргужите рисунок чека
         </div>
     </el-form-item>
     </div>
     <div class="col-md-8 pr-2 pl-2 mb-2">    
-      <el-button type="success" class="btn-block" style="background-color:#57b151; border-color:#57b151;" @click="addRequest()">Отправить</el-button>
+      <el-button type="success" class="btn-block" @click="triggerSend()" style="background-color:#57b151; border-color:#57b151;" >Отправить</el-button>
     </div>
     <div class="col-md-4 pr-2 pl-2 mb-2">    
       <el-button type="danger" class="btn-block" @click="resetForm()">Сбросить</el-button>
@@ -74,7 +74,7 @@ export default {
       },
       imageMessage: false,
       options: {
-        url: 'addrequest',
+        url: '/api/addrequest',
         autoProcessQueue: false,
         uploadMultiple: true,
         acceptedFiles: "image/*",
@@ -132,23 +132,32 @@ export default {
     }
   },   
   mounted() {
-    const instance = this.$refs.el.dropzone
+    const instance = this.$refs.myVueDropzone.dropzone
   },
   methods:{
       success(file, response) {
-            this.form.image = response.imageName
+          if (response.status === 201) {
+                this.show = false;
+                this.$notify({
+                  title: "Спасибо, заявка принята",
+                  message: "Ожидайте в течении 10 минут оператор свяжется с Вами",
+                  position: "bottom-right",
+                  type: "success",
+                  showClose: false,
+                });
+              }
         },
       removedImage(file, response) {
             this.form.image = ''
             this.imageMessage = true
-        },
+      },
       addRequest() {
       this.$refs["form"].validate((valid) => {
           if (!valid) {
             return false;
           }
           this.$axios
-            .post("addrequest", {  fio: this.form.fio,  transport: this.form.transport, phone: this.form.phone, image: this.form.image })
+            .post("addrequest", {  fio: this.form.fio,  transport: this.form.transport, phone: this.form.phone })
             .then((response) => {
               if (response.status === 201) {
                 this.show = false;
@@ -176,6 +185,24 @@ export default {
       },
       resetForm() {
         this.$refs["form"].resetFields();        
+      },
+
+      triggerSend() {
+        this.$refs.myVueDropzone.processQueue();
+      },
+      sendingEvent(file, xhr, formData) {
+        
+        this.$refs["form"].validate((valid) => {
+          if (!valid) {
+            return false;
+          }
+        formData.append("fio", this.form.fio);        
+        formData.append("phone", this.form.phone);        
+        formData.append("transport", this.form.transport);
+        this.$refs["form"].resetFields();  
+        });
+
+        console.log(formData);
       },
   }
 
