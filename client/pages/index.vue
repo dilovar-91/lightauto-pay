@@ -43,7 +43,7 @@
   list-type="picture-card"
   :http-request="handleDownload"  
   ref="upload"  
-  :headers="headerInfo"
+  
   :data="form"
   :before-upload="handleBeforeUpload"
   :auto-upload="false">
@@ -118,11 +118,7 @@ export default {
         phone: '',
         image: ''
       },
-      headerInfo: {
-        'Access-Control-Allow-Origin': this.$axios.post('addrequest'),
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, X-File-Name, X-File-Size, X-File-Type'
-      },
+     
       dialogImageUrl: '',
       dialogVisible: false,
       disabled: false,
@@ -212,11 +208,11 @@ export default {
       formData.append('fio', this.form.fio);
       formData.append('transport', this.form.transport);
       formData.append('phone', this.form.phone);
-      formData.append('file', this.$refs.upload.fileList);
-      console.log(this.$refs.upload.fileList)
+      formData.append('file', this.file);
+      console.log(this.file)
       console.log(formData.fileList)
       this.$axios
-        .post('/addrequest', formData)
+        .post('/addrequest', formData,  {headers: {'Authorization' : 'Bearer ' + localStorage.getItem('token') ,'Content-Type': 'multipart/form-data'}})
         .then(() => {
           this.$notify({
                   title: "Спасибо, заявка принята",
