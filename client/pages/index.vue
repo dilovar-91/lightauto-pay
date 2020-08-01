@@ -208,8 +208,8 @@ export default {
       formData.append('fio', this.form.fio);
       formData.append('transport', this.form.transport);
       formData.append('phone', this.form.phone);
-      formData.append('file', this.$refs.upload.data.fileList);
-      console.log(this.$refs.upload.data.fileList)
+      formData.append('file', this.$refs.upload.fileList);
+      console.log(this.$refs.upload.fileList)
       console.log(formData)
       this.$axios
         .post('/addrequest', formData,  {headers: {'Authorization' : 'Bearer ' + localStorage.getItem('token') ,'Content-Type': 'multipart/form-data'}})
