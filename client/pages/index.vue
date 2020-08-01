@@ -38,13 +38,13 @@
     <div class="col-md-12 pr-2 pl-2 mb-2">      
     <el-form-item>
     <el-upload
-  action="#"
-  name="file[]"
+  action="#"  
   list-type="picture-card"
   :http-request="handleDownload"  
   ref="upload"  
   :on-success="handleSuccess"
   :data="form"
+  :file-list="fileList"
   :before-upload="handleBeforeUpload"
   :auto-upload="false">
     <i slot="default" class="el-icon-plus"></i>
@@ -196,25 +196,19 @@ export default {
         'image/*',        
       ];
       if (allowedCsvMime.includes(file.type)) {
+         this.fileList.push(file);
         return true;
-      } else {
-         this.$notify({
-                title: "Ошибка",
-                message: "Загрузите только фото",
-                position: "bottom-right",
-                type: "error",
-                showClose: false,
-              });        
-        this.fileList.pop(file);
+      } else {           
+       return false
       }
     },
-      handleDownload() {
+      handleDownload(param) {
        const formData = new FormData();
       formData.append('fio', this.form.fio);
       formData.append('transport', this.form.transport);
       formData.append('phone', this.form.phone);
-      formData.append('file', this.fileList);
-      console.log(this.fileList)
+      formData.append('file', this.param.file);
+      console.log(this.param.file)
       console.log(formData)
       this.$axios
         .post('/addrequest', formData,  
