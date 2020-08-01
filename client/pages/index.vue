@@ -39,11 +39,11 @@
     <el-form-item>
     <el-upload
   action="#"
-  :file-list="fileList"
+  name="file[]"
   list-type="picture-card"
   :http-request="handleDownload"  
   ref="upload"  
-  
+  :on-success="handleSuccess"
   :data="form"
   :before-upload="handleBeforeUpload"
   :auto-upload="false">
@@ -182,6 +182,11 @@ export default {
         this.dialogVisible = true;
       },
 
+       handleSuccess(response, file, fileList) {
+              
+                this.fileList = fileList;
+            },
+
       submitUpload() {
         this.$refs.upload.submit();
       },
@@ -208,8 +213,8 @@ export default {
       formData.append('fio', this.form.fio);
       formData.append('transport', this.form.transport);
       formData.append('phone', this.form.phone);
-      formData.append('file', this.$refs.upload.fileList);
-      console.log(this.$refs.upload.fileList)
+      formData.append('file', this.fileList);
+      console.log(this.fileList)
       console.log(formData)
       this.$axios
         .post('/addrequest', formData,  
