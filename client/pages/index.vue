@@ -212,7 +212,13 @@ export default {
       console.log(this.$refs.upload.fileList)
       console.log(formData)
       this.$axios
-        .post('/addrequest', formData,  {headers: {'Authorization' : 'Bearer ' + localStorage.getItem('token') ,'Content-Type': 'multipart/form-data'}})
+        .post('/addrequest', formData,  
+            {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+            }
+        )
         .then(() => {
           this.$notify({
                   title: "Спасибо, заявка принята",
