@@ -175,11 +175,6 @@ export default {
     //const instance = this.$refs.myVueDropzone.dropzone
   },
   methods:{ 
-
-    submitRequest() {
-        this.$refs.upload.submit();
-      },
-    
       submitUpload() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
@@ -209,6 +204,7 @@ export default {
                           showClose: false,
                         });
                         this.$refs["form"].resetFields();
+                        this.$refs.upload.clearFiles()
                 })
                 .catch((err) => {
                   this.$notify({
