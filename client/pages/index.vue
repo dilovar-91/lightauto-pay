@@ -46,8 +46,7 @@
                 :data="form"
                 :on-success="handleSuccess"
                 :on-remove="handleRemove"
-                :on-change="handleChange"
-                :before-remove="beforeRemove"
+                :on-change="handleChange"               
                 multiple
                 :limit="3"
                 :on-exceed="handleExceed"
@@ -109,9 +108,6 @@ export default {
   'layout': 'main', 
   head () {
     return { title: 'Оплата проезда' }
-  },
-  components: {
-    Dropzone
   },
   data() {
     return {
@@ -185,48 +181,49 @@ export default {
       },
     
       submitUpload() {
-              //this.$refs.upload.submit();
-
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+              const formData = new FormData();
+              formData.append('fio', this.form.fio);
+              formData.append('transport', this.form.transport);
+              formData.append('phone', this.form.phone);
               
-
-      const formData = new FormData();
-     
-
-      formData.append('fio', this.form.fio);
-      formData.append('transport', this.form.transport);
-      formData.append('phone', this.form.phone);
-      formData.append('file', this.form.images)     
-      
-      
-      console.log(this.form.images)
-      console.log(formData)
-      this.$axios
-        .post('/addrequest', formData,  
-            {
-              headers: {
-                  'Content-Type': 'multipart/form-data'
-              }
-            }
-        )
-        .then(() => {
-          this.$notify({
-                  title: "Спасибо, заявка принята",
-                  message: "Ожидайте в течении 30 минут оператор свяжется с Вами",
-                  position: "bottom-right",
-                  type: "success",
-                  showClose: false,
+              for(let i=0;i<this.form.images.length;i++){
+                            formData.append('file', this.form.images[i]);
+                        }     
+              
+              this.$axios
+                .post('/addrequest', formData,  
+                    {
+                      headers: {
+                          'Content-Type': 'multipart/form-data'
+                      }
+                    }
+                )
+                .then(() => {
+                  this.$notify({
+                          title: "Спасибо, заявка принята",
+                          message: "Ожидайте в течении 30 минут оператор свяжется с Вами",
+                          position: "bottom-right",
+                          type: "success",
+                          showClose: false,
+                        });
+                        this.$refs["form"].resetFields();
+                })
+                .catch((err) => {
+                  this.$notify({
+                        title: "Извините",
+                        message: "Произошла ошибка, повторите ещё раз!!!",
+                        position: "bottom-right",
+                        type: "error",
+                        showClose: false,
+                      });
                 });
-                this.$refs["form"].resetFields();
-        })
-        .catch((err) => {
-          this.$notify({
-                title: "Извините",
-                message: "Произошла ошибка, повторите ещё раз!!!" + err,
-                position: "bottom-right",
-                type: "error",
-                showClose: false,
-              });
-        });
+               }
+               else {               
+                return false;
+               }
+             });
             },
           handleRemove(file, fileList) {
                 let vm = this
@@ -250,11 +247,15 @@ export default {
                 }                                            
             },
             handleExceed(files, fileList) {
-                this.$message.warning(`The limit is 3, you selected ${files.length} files this time, add up to ${files.length + fileList.length} totally`);
+                this.$notify({
+                        title: "Извините",
+                        message: "Загружать не более 4 файлов!!!",
+                        position: "bottom-right",
+                        type: "error",
+                        showClose: false,
+                      });
             },
-            beforeRemove(file, fileList) {
-                return this.$confirm(`do you really want to delete ${ file.name }？`);
-            }
+            
     
   }
 
