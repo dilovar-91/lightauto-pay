@@ -189,7 +189,7 @@ export default {
               formData.append('phone', this.form.phone);
               
               for(let i=0;i<this.form.images.length;i++){
-                            formData.append('file', this.form.images[i]);
+                            formData.append('file[]', this.form.images[i]);
                         }     
               
               this.$axios
