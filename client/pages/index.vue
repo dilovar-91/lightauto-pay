@@ -105,8 +105,6 @@
   </div>
 </template>
 <script>
-import Dropzone from 'nuxt-dropzone'
-import 'nuxt-dropzone/dropzone.css'
 export default {
   'layout': 'main', 
   head () {
@@ -262,6 +260,3 @@ export default {
 
 }
 </script>
-<style scoped>
-@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
-</style>
