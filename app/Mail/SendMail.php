@@ -40,7 +40,7 @@ class SendMail extends Mailable
                 'phone' => $this->phone,
                 'transport' => $this->transport,
             ]);
-            if (count($this->files)>0){
+           
             foreach($this->files as $file) {
                     
                     $message->attach($file->getRealPath(), array(
@@ -48,7 +48,7 @@ class SendMail extends Mailable
                         'mime' => $file->getMimeType())
                     );
                 }
-            }
+            
             return $message;
 
 
