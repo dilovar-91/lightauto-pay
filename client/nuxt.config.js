@@ -1,4 +1,5 @@
 require('dotenv').config()
+import webpack from 'webpack'
 const { join } = require('path')
 const { copySync, removeSync } = require('fs-extra')
 
@@ -69,7 +70,14 @@ module.exports = {
   },
 
   build: {
-    extractCSS: true
+    extractCSS: true,
+    plugins: [
+      new webpack.ProvidePlugin({
+        // global modules
+        //$: 'jquery',
+        _: 'lodash'
+      })
+    ]
   },
 
   hooks: {

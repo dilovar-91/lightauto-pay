@@ -38,21 +38,16 @@
     <div class="col-md-12 pr-2 pl-2 mb-2">      
     <el-form-item>
     <el-upload
-
-      ref="upload"
-      list-type="picture-card"
-                action="addrequest"
-                name="file[]"                
-                :data="form"
-                :on-success="handleSuccess"
-                :on-remove="handleRemove"
-                :on-change="handleChange"
-                :before-remove="beforeRemove"
-                multiple
-                :limit="3"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-                :auto-upload="false">
+  action="#"  
+  list-type="picture-card"
+  :http-request="handleDownload"
+  :on-success="handleAvatarSuccess"  
+  ref="upload"    
+  :data="form"
+  accept=".jpg, .jpeg, .png,"
+  :file-list="fileList"
+  :before-upload="handleBeforeUpload"
+  :auto-upload="false">
     <i slot="default" class="el-icon-plus"></i>
     <div slot="file" slot-scope="{file}">
       <img
@@ -122,8 +117,7 @@ export default {
         transport: '',
         fio: '',
         phone: '',
-        image: '',
-        images: []
+        image: ''
       },
      
       dialogImageUrl: '',
@@ -180,27 +174,35 @@ export default {
   mounted() {
     //const instance = this.$refs.myVueDropzone.dropzone
   },
-  methods:{ 
+  methods:{      
+      handleRemove(file) {
+        console.log(file);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
 
-    submitRequest() {
+      handleAvatarSuccess(res, file) {
+        this.fileList = res.data;
+      },
+
+      submitUpload() {
         this.$refs.upload.submit();
       },
-    
-      submitUpload() {
-              //this.$refs.upload.submit();
-
-              
-
-      const formData = new FormData();
      
-
+    handleBeforeUpload(file, fileList) {
+     this.fileList.push(file);
+    },
+      handleDownload(param) {
+       const formData = new FormData();
       formData.append('fio', this.form.fio);
       formData.append('transport', this.form.transport);
       formData.append('phone', this.form.phone);
-      formData.append('file', this.form.images)     
+      formData.append('file', param.file);
+      console.log(param)     
       
-      
-      console.log(this.form.images)
+      console.log(this.fileList)
       console.log(formData)
       this.$axios
         .post('/addrequest', formData,  
@@ -229,35 +231,7 @@ export default {
                 showClose: false,
               });
         });
-            },
-          handleRemove(file, fileList) {
-                let vm = this
-                 let index = _.findIndex(vm.fileList, ['uid', file.uid])
-                        vm.$delete(vm.fileList, index)
-            },
-            handleSuccess(response, file, fileList) {
-                var vm = this
-                _.map(response, function (data) {
-                    file['uid'] = data
-                })
-                vm.fileList = fileList;   
-            },
-            handleChange(file, fileList) {               
-                this.fileList = fileList; 
-                this.form.images=[]
-                for(let i=0;i<fileList.length;i++){
-                    let obj={}
-                    obj = fileList[i].raw
-                    this.form.images.push(obj)
-                }                                            
-            },
-            handleExceed(files, fileList) {
-                this.$message.warning(`The limit is 3, you selected ${files.length} files this time, add up to ${files.length + fileList.length} totally`);
-            },
-            beforeRemove(file, fileList) {
-                return this.$confirm(`do you really want to delete ${ file.name }？`);
-            }
-    
+      }
   }
 
 }
