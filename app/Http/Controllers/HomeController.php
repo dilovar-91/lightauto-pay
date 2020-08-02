@@ -20,7 +20,7 @@ class HomeController extends Controller
     {
         //$images = $request->file('file');
         //$count = count($images);
-        //dd($request); 
+        dd($request); 
         $fio = $request->fio;
         $phone = $request->phone;
         $transport = $request->transport;
