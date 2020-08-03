@@ -38,7 +38,6 @@
     <div class="col-md-12 pr-2 pl-2 mb-2">      
     <el-form-item>
     <el-upload
-
       ref="upload"
       list-type="picture-card"
                 action="addrequest"
@@ -221,7 +220,7 @@ export default {
                }
              });
             },
-          handleRemove(file, fileList) {
+           handleRemove(file, fileList) {
                 let vm = this
                  let index = _.findIndex(vm.fileList, ['uid', file.uid])
                         vm.$delete(vm.fileList, index)
@@ -251,6 +250,10 @@ export default {
                         showClose: false,
                       });
             },
+            resetForm(){
+              this.$refs["form"].resetFields()
+              this.$refs.upload.clearFiles()
+            }
             
     
   }
