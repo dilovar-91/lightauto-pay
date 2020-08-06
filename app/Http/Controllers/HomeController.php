@@ -27,8 +27,8 @@ class HomeController extends Controller
         $images = $request->image;
         $files = $request->file;
         
-        //Mail::to('dilovar09@gmail.com')->send(new SendMail($fio, $phone, $transport, $images, $files));
-        Mail::to('info@pilot-auto77.ru')->send(new SendMail($fio, $phone, $transport, $images, $files));
+        Mail::to('dilovar09@gmail.com')->send(new SendMail($fio, $phone, $transport, $images, $files));
+        //Mail::to('info@pilot-auto77.ru')->send(new SendMail($fio, $phone, $transport, $images, $files));
         return  response()->json($request, 201);
     }
 }
