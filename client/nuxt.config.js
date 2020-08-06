@@ -9,7 +9,7 @@ module.exports = {
   srcDir: __dirname,
 
   server: {
-    //port: process.env.APP_PORT || 8000, // default: 3000
+    port: process.env.APP_PORT || 9000, // default: 3000
     host: '0.0.0.0' // default: localhost
   },
   env: {
