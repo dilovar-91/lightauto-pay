@@ -38,7 +38,7 @@
         </div>
 
         <div class="col-md-12 pr-2 pl-2 mb-2">
-          <el-form-item prop="file" required>
+          <el-form-item>
             <el-upload
               ref="upload"
               list-type="picture-card"
