@@ -9,8 +9,8 @@ module.exports = {
   srcDir: __dirname,
 
   server: {
-    port: process.env.APP_PORT || 8000, // default: 3000
-    //host: '0.0.0.0' // default: localhost
+    //port: process.env.APP_PORT || 8000, // default: 3000
+    host: '0.0.0.0' // default: localhost
   },
   env: {
     apiUrl: process.env.API_URL || process.env.APP_URL + '/api',
@@ -63,7 +63,7 @@ module.exports = {
   axios: {
     // extra config e.g
     BaseURL: process.env.API_URL,
-    requestInterceptor: (config, {store}) => {
+    requestInterceptor: (config, { store }) => {
       config.headers.common['Authorization'] = 'Bearer ' + store.state.token
       return config
     }
@@ -82,7 +82,7 @@ module.exports = {
 
   hooks: {
     generate: {
-      done (generator) {
+      done(generator) {
         // Copy dist files to public/_nuxt
         if (generator.nuxt.options.dev === false && generator.nuxt.options.mode === 'spa') {
           const publicDir = join(generator.nuxt.options.rootDir, 'public', '_nuxt')

@@ -36,8 +36,9 @@
             />
           </el-form-item>
         </div>
+
         <div class="col-md-12 pr-2 pl-2 mb-2">
-          <el-form-item>
+          <el-form-item prop="file" required>
             <el-upload
               ref="upload"
               list-type="picture-card"
@@ -83,8 +84,7 @@
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
-            <div v-if="form.imageMessage" class="el-form-item__error">Загрузите фото чека</div>
-            <div v-if="!form.imageMessage" class="el-form-item__error text-muted">Фото чека</div>
+            <div class="el-form-item">Фото чека</div>
           </el-form-item>
         </div>
         <div class="col-md-8 pr-2 pl-2 mb-2">
@@ -175,6 +175,9 @@ export default {
             message: "Вы ввели номер неправильно",
             trigger: "blur",
           },
+        ],
+        file: [
+          { required: true, message: "Загрузите фото чека", trigger: "change" },
         ],
       },
     };
