@@ -32,7 +32,7 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        $message =  $this->from('hello@paytravel.ru', 'Пилот авто')
+        $message =  $this->from('hello@la-pay.ru', 'Лайт Авто')
             ->subject('Оплата проезда')
             ->markdown('mails.exmpl')
             ->with([
