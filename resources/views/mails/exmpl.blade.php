@@ -5,6 +5,6 @@
 @component('mail::button', ['url' => 'tel:'.$phone])
 {{$phone}}
 @endcomponent
-Отправлено из https://paytravel77.ru  
-Пилот авто {{date('Y')}}
+Отправлено из https://la-pay.ru/  
+Лайт авто {{date('Y')}}
 @endcomponent
