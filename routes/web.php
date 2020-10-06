@@ -17,7 +17,11 @@
 //    return file_get_contents(public_path('_nuxt/index.html'));
 //})->where('path', '(.*)');
 
-Route::any('{all}', function () {
+//Route::any('{all}', function () {
     //return file_get_contents(public_path('_nuxt/index.html'));
-    return abort(404);
+ //   return abort(404);
+//})->where('all', '^(?!api).*$');
+
+Route::any('{all}', function () {
+    return file_get_contents(public_path('_nuxt/index.html'));
 })->where('all', '^(?!api).*$');
